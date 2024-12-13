@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1cf922c2-459b-4f5c-9bb6-a827d85fb4e0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="nama_customer" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="bulan" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT 
+    p.pesanan_id,
+    c.nama AS nama_customer,
+    b.nama_bunga,
+    d.jumlah,
+    d.subtotal,
+    p.tanggal,
+    p.total_harga
+FROM 
+    detail_pesanan d
+JOIN 
+    pesanan p ON d.pesanan_id = p.pesanan_id
+JOIN 
+    customer c ON p.customer_id = c.customer_id
+JOIN 
+    bunga b ON d.bunga_id = b.bunga_id
+JOIN
+    pengiriman pg ON p.pesanan_id = pg.pesanan_id -- Menambahkan join ke tabel pengiriman (misal)
+WHERE 
+    c.nama = $P{nama_customer} -- Filter berdasarkan nama customer
+    AND EXTRACT(MONTH FROM pg.tanggal) = $P{bulan} -- Filter berdasarkan bulan pengiriman
+GROUP BY 
+    p.pesanan_id, 
+    c.nama,
+    b.nama_bunga, 
+    d.jumlah,
+    d.subtotal,
+    p.tanggal, 
+    p.total_harga
+ORDER BY 
+    c.nama, 
+    p.tanggal;]]>
+	</queryString>
+	<field name="pesanan_id" class="java.lang.Integer"/>
+	<field name="nama_customer" class="java.lang.String"/>
+	<field name="nama_bunga" class="java.lang.String"/>
+	<field name="jumlah" class="java.lang.Integer"/>
+	<field name="subtotal" class="java.math.BigDecimal"/>
+	<field name="tanggal" class="java.sql.Date"/>
+	<field name="total_harga" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="27" uuid="80aa08ff-b65e-4be2-a025-687f1d6246ab"/>
+				<textElement textAlignment="Center">
+					<font fontName="Century" size="20"/>
+				</textElement>
+				<text><![CDATA[TOKO BUNGA ANASTASYA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="27" width="555" height="20" uuid="964bb29f-7508-4518-9d2b-db11227c7de8"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[JL. Imam Bonjol No, 6 Prambon - sidoarjo]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="58" width="555" height="1" uuid="b8121005-9a13-4a3c-8d86-fff47b62f667"/>
+			</line>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="15" width="100" height="20" uuid="e56e2c12-6ca6-42d4-a639-5d2b7b3ae088"/>
+				<textFieldExpression><![CDATA[$F{nama_customer}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="77" splitType="Stretch">
+			<staticText>
+				<reportElement x="166" y="22" width="100" height="20" uuid="bea3aeb2-e914-42bb-98d0-150fea4997a8"/>
+				<text><![CDATA[Nama Bunga]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="266" y="22" width="100" height="20" uuid="c5276c97-2fee-41a4-b501-bbb38a33609b"/>
+				<text><![CDATA[Jumlah]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="366" y="22" width="100" height="20" uuid="9db2370f-5912-49c7-82e6-db4c735c41b4"/>
+				<text><![CDATA[Harga]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="66" y="22" width="100" height="20" uuid="02a434a0-f303-4d38-b32a-0469c6106b69"/>
+				<text><![CDATA[Id]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<textField>
+				<reportElement x="166" y="20" width="100" height="20" uuid="cbdf4834-ef39-43da-a753-db9f83e94e22"/>
+				<textFieldExpression><![CDATA[$F{nama_bunga}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="266" y="20" width="100" height="20" uuid="499a54f9-a080-400b-87a4-813d3cea26c9"/>
+				<textFieldExpression><![CDATA[$F{jumlah}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="366" y="20" width="100" height="20" uuid="869b6bf2-09c8-4452-b9db-9455c5ff0c7d"/>
+				<textFieldExpression><![CDATA[$F{subtotal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="66" y="20" width="100" height="20" uuid="d1b792ee-57f0-4e73-80d6-74ae92784ad0"/>
+				<textFieldExpression><![CDATA[$F{pesanan_id}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch">
+			<textField>
+				<reportElement x="447" y="25" width="100" height="20" uuid="fc431d0f-cb2b-4745-9553-3f16da4ab383"/>
+				<textFieldExpression><![CDATA[$F{total_harga}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="327" y="25" width="100" height="20" uuid="63f52da2-d30e-42d9-bcd8-26cfdcc86eb3"/>
+				<text><![CDATA[total  pembayaran]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
